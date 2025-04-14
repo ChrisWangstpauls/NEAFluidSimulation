@@ -202,12 +202,12 @@ public class FluidSimulation : MonoBehaviour
 			colourGradient.SetKeys(colourKeys, alphaKeys);
 		}
 
-			_currentRunID = SQL.SaveSimRunParams(
-			size, diffusion, viscosity, timeStep,
-			enableCustomSource, sourceStrength, sourcePositionX, sourcePositionY,
-			enableObstacle, obstacleShape.ToString(), obstaclePositionX, obstaclePositionY,
-			obstacleRadius, obstacleWidth, obstacleHeight
-			);
+		_currentRunID = SQL.SaveSimRunParams(
+		size, diffusion, viscosity, timeStep,
+		enableCustomSource, sourceStrength, sourcePositionX, sourcePositionY,
+		enableObstacle, obstacleShape.ToString(), obstaclePositionX, obstaclePositionY,
+		obstacleRadius, obstacleWidth, obstacleHeight
+		);
 	}
 
 	void ResetSimulation()
@@ -741,7 +741,7 @@ public class FluidSimulation : MonoBehaviour
 	{
 		DiffuseWithJobs(b, x, x0, diff, dt);
 		float a = dt * diff * (currentSize - 2) * (currentSize - 2);
-		LinearSolveWithJobs(b, x, x0, a, 1 + 6 * a);
+		LinearSolveWithJobs(b, x, x0, a, 1 + 4 * a);
 	}
 
 	public static class GridUtils
@@ -1293,7 +1293,7 @@ public class FluidSimulation : MonoBehaviour
 	{
 		int totalSize = currentSize * currentSize;
 		float a = dt * diff * (currentSize - 2) * (currentSize - 2);
-		float c = 1 + 6 * a;
+		float c = 1 + 4 * a;
 
 		// Create native arrays for double buffering
 		NativeArray<float> buffer1 = new NativeArray<float>(x0, Allocator.TempJob);
@@ -2003,22 +2003,22 @@ public class FluidSimulation : MonoBehaviour
 
 	public void SaveCurrentConfiguration()
 	{
-			SQL.SaveSimRunParams(
-			size,
-			diffusion,
-			viscosity,
-			timeStep,
-			enableCustomSource,
-			sourceStrength,
-			sourcePositionX,
-			sourcePositionY,
-			enableObstacle,
-			obstacleShape.ToString(),
-			obstaclePositionX,
-			obstaclePositionY,
-			obstacleRadius,
-			obstacleWidth,
-			obstacleHeight
-			);
+		SQL.SaveSimRunParams(
+		size,
+		diffusion,
+		viscosity,
+		timeStep,
+		enableCustomSource,
+		sourceStrength,
+		sourcePositionX,
+		sourcePositionY,
+		enableObstacle,
+		obstacleShape.ToString(),
+		obstaclePositionX,
+		obstaclePositionY,
+		obstacleRadius,
+		obstacleWidth,
+		obstacleHeight
+		);
 	}
 }

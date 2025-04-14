@@ -1,6 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 using Mono.Data.Sqlite;
+
+using static FluidSimulation;
+using System.Data.Common;
+using System.Threading.Tasks;
 using System;
+using System.IO;
+using static Unity.Burst.Intrinsics.X86.Avx;
 
 public class SQL : MonoBehaviour
 {
@@ -17,31 +26,32 @@ public class SQL : MonoBehaviour
 
 	//			// Modified SimulationRuns table with auto-incrementing primary key
 	//			cmd.CommandText = @"
- //               CREATE TABLE IF NOT EXISTS SimulationRuns (
- //                   RunID INTEGER PRIMARY KEY AUTOINCREMENT,
- //                   Size INTEGER,
- //                   Diffusion REAL,
- //                   Viscosity REAL,
- //                   -- ... other existing columns ...
- //                   Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
- //               );";
+	//               CREATE TABLE IF NOT EXISTS SimulationRuns (
+	//                   RunID INTEGER PRIMARY KEY AUTOINCREMENT,
+	//                   Size INTEGER,
+	//                   Diffusion REAL,
+	//                   Viscosity REAL,
+	//                   -- ... other existing columns ...
+	//                   Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+	//               );";
 	//			cmd.ExecuteNonQuery();
 
 	//			// Modified RuntimeMetrics table with foreign key
 	//			cmd.CommandText = @"
- //               CREATE TABLE IF NOT EXISTS RuntimeMetrics (
- //                   MetricID INTEGER PRIMARY KEY AUTOINCREMENT,
- //                   RunID INTEGER,
- //                   Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
- //                   AverageDensity REAL,
- //                   MaxVelocityMagnitude REAL,
- //                   FOREIGN KEY(RunID) REFERENCES SimulationRuns(RunID) ON DELETE CASCADE
- //               );";
+	//               CREATE TABLE IF NOT EXISTS RuntimeMetrics (
+	//                   MetricID INTEGER PRIMARY KEY AUTOINCREMENT,
+	//                   RunID INTEGER,
+	//                   Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+	//                   AverageDensity REAL,
+	//                   MaxVelocityMagnitude REAL,
+	//                   FOREIGN KEY(RunID) REFERENCES SimulationRuns(RunID) ON DELETE CASCADE
+	//               );";
 	//			cmd.ExecuteNonQuery();
 	//		}
 	//		conn.Close();
 	//	}
 	//}
+
 
 	public static int SaveSimRunParams(int size, float diffusion, float viscosity, float timeStep,
 	   bool sourceEnabled, float sourceStrength, float sourceX, float sourceY,
@@ -50,9 +60,9 @@ public class SQL : MonoBehaviour
 	{
 		int runId = -1;
 
-		if (timeStep == 0.100000001490116)
+		if (Mathf.Abs(timeStep - 0.1f) < 1e-6f)
 		{
-			return runId;
+			return runId; // Skip invalid timeStep
 		}
 
 		using (var conn = new SqliteConnection("URI=file:C:\\Users\\chris\\My project (2)\\test.db"))
@@ -67,10 +77,7 @@ public class SQL : MonoBehaviour
                     (@Size, @Diffusion, @Viscosity, @TimeStep, @SourceEnabled, @SourceStrength, @SourcePositionX, @SourcePositionY, 
                      @ObstacleEnabled, @ObstacleType, @ObstaclePositionX, @ObstaclePositionY, @ObstacleRadius, @ObstacleWidth, @ObstacleHeight)";
 
-				Debug.Log($"timeStep: {timeStep}");
-				if (timeStep > 0.100000001400116 && timeStep < 0.100000001500116) { return runId; }
-
-					cmd.Parameters.Add(new SqliteParameter("@Size", size));
+				cmd.Parameters.Add(new SqliteParameter("@Size", size));
 				cmd.Parameters.Add(new SqliteParameter("@Diffusion", diffusion));
 				cmd.Parameters.Add(new SqliteParameter("@Viscosity", viscosity));
 				cmd.Parameters.Add(new SqliteParameter("@TimeStep", timeStep));
@@ -93,10 +100,11 @@ public class SQL : MonoBehaviour
 			conn.Close();
 		}
 		return runId;
+
 	}
 
 	public static void LogRuntimeMetrics(
-		int runId, 
+		int runId,
 		int step,
 		float avgDensity,
 		float maxVelocity,
@@ -126,3 +134,4 @@ public class SQL : MonoBehaviour
 		}
 	}
 }
+

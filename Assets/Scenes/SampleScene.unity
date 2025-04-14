@@ -259,7 +259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enableRuntimeLogging: 1
   _loggingInterval: 30
-  paused: 0
+  paused: 1
   size: 64
   physicalSize: 2
   resolutionMultiplier: 3
@@ -268,7 +268,7 @@ MonoBehaviour:
   timeStep: 0.0025
   autoAdjustParameters: 1
   applyTurbulentNoise: 0
-  enableCustomSource: 1
+  enableCustomSource: 0
   sourceStrength: 122
   sourceEmitsVelocity: 1
   sourceDirection: 0
@@ -333,7 +333,7 @@ MonoBehaviour:
   streamlineScale: 5
   streamlineColor: {r: 1, g: 1, b: 1, a: 1}
   streamlineThickness: 0.5
-  enableObstacle: 1
+  enableObstacle: 0
   obstacleShape: 2
   obstaclePositionX: 0.5
   obstaclePositionY: 0.5

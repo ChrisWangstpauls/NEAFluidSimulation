@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/main-menu.uss?fileID=7433441132597879392&amp;guid=b16f06e9d4ea09244925613a16f84091&amp;type=3#main-menu" />
-    <ui:VisualElement name="Panel" class="panel" style="flex-grow: 1; opacity: 0.9; background-color: rgb(206, 140, 140); height: 473px;">
+    <ui:VisualElement name="Panel" class="panel" style="flex-grow: 1; opacity: 1; background-color: rgb(230, 153, 153); height: 473px;">
         <ui:VisualElement name="Container" class="menu" style="flex-grow: 1; opacity: 0.9; border-left-color: rgba(63, 31, 31, 0); border-right-color: rgba(63, 31, 31, 0); border-top-color: rgba(63, 31, 31, 0); border-bottom-color: rgba(63, 31, 31, 0); height: 288px; width: 748px; justify-content: center; color: rgb(42, 42, 42);">
             <ui:Label tabindex="-1" text="Main Menu" parse-escape-sequences="true" display-tooltip-when-elided="true" style="align-items: center; justify-content: flex-start; align-self: center; -unity-text-align: middle-left; height: -226px; font-size: 70px; -unity-font-style: bold; background-color: rgba(0, 0, 0, 0);" />
             <ui:Button text="Enter" parse-escape-sequences="true" display-tooltip-when-elided="true" name="EnterButton" class="unity-button" />
